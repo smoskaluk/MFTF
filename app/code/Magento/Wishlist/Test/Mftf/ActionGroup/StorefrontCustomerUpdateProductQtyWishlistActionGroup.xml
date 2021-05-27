@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerUpdateWishlistItemActionGroup">
+        <annotations>
+            <description>Update Product's Quantity for Customer Wishlist Item.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
+        <waitForPageLoad stepKey="waitForWishList"/>
+        <waitForElementVisible selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="waitForProductInfo"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="mouseOverOnProduct"/>
+        <click selector="{{StorefrontCustomerWishlistProductSection.editProduct(product.name)}}" stepKey="EditProductFromWishlist"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.ProductQuantity}}" userInput="{{productQty}}" stepKey="editQtyProductField"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="submitButtonToUpdateWishlistProduct"/>
+    </actionGroup>
+</actionGroups>
