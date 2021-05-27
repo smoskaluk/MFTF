@@ -1,0 +1,216 @@
+Index: app/code/Magento/Wishlist/Test/Mftf/ActionGroup/StorefrontCustomerUpdateProductQtyWishlistActionGroup.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Wishlist/Test/Mftf/ActionGroup/StorefrontCustomerUpdateProductQtyWishlistActionGroup.xml	(date 1622103453000)
++++ app/code/Magento/Wishlist/Test/Mftf/ActionGroup/StorefrontCustomerUpdateProductQtyWishlistActionGroup.xml	(date 1622103453000)
+@@ -0,0 +1,30 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++ /**
++  * Copyright © Magento, Inc. All rights reserved.
++  * See COPYING.txt for license details.
++  */
++-->
++
++<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
++    <actionGroup name="StorefrontCustomerUpdateWishlistItemActionGroup">
++        <annotations>
++            <description>Update Product's Quantity for Customer Wishlist Item.</description>
++        </annotations>
++        <arguments>
++            <argument name="productName" type="string"/>
++            <argument name="productQty" type="string"/>
++        </arguments>
++
++        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
++        <waitForPageLoad stepKey="waitForWishList"/>
++        <waitForElementVisible selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="waitForProductInfo"/>
++        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="mouseOverOnProduct"/>
++        <click selector="{{StorefrontCustomerWishlistProductSection.editProduct(product.name)}}" stepKey="EditProductFromWishlist"/>
++        <fillField selector="{{StorefrontProductInfoMainSection.ProductQuantity}}" userInput="{{productQty}}" stepKey="editQtyProductField"/>
++        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="submitButtonUpdateWishlistProduct"/>
++
++
++    </actionGroup>
++</actionGroups>
+Index: app/code/Magento/Wishlist/Test/Mftf/ActionGroup/StorefrontCustomerAddProductFromPersonalWishlistToCartActionGroup.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Wishlist/Test/Mftf/ActionGroup/StorefrontCustomerAddProductFromPersonalWishlistToCartActionGroup.xml	(date 1622055207000)
++++ app/code/Magento/Wishlist/Test/Mftf/ActionGroup/StorefrontCustomerAddProductFromPersonalWishlistToCartActionGroup.xml	(date 1622055207000)
+@@ -0,0 +1,23 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++ /**
++  * Copyright © Magento, Inc. All rights reserved.
++  * See COPYING.txt for license details.
++  */
++-->
++
++<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
++    <actionGroup name="StorefrontCustomerAddProductFromPersonalWishlistToCartActionGroup">
++        <annotations>
++            <description>Go to storefront customer wishlist page and add product to the cart.</description>
++        </annotations>
++        <arguments>
++            <argument name="productName" type="string"/>
++        </arguments>
++        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
++        <waitForPageLoad stepKey="waitForWishList"/>
++        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="mouseOverOnProduct"/>
++        <click selector="{{StorefrontCustomerWishlistProductSection.ButtonAddProductToCart}}" stepKey="clickButtonAddProductToCart"/>
++    </actionGroup>
++</actionGroups>
+Index: app/code/Magento/Wishlist/Test/Mftf/ActionGroup/AssertProductQtysInWishlistActionGroup.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Wishlist/Test/Mftf/ActionGroup/AssertProductQtysInWishlistActionGroup.xml	(date 1622052190000)
++++ app/code/Magento/Wishlist/Test/Mftf/ActionGroup/AssertProductQtysInWishlistActionGroup.xml	(date 1622052190000)
+@@ -0,0 +1,24 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++ /**
++  * Copyright © Magento, Inc. All rights reserved.
++  * See COPYING.txt for license details.
++  */
++-->
++
++<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
++    <actionGroup name="AssertProductQtyInWishListActionGroup">
++        <annotations>
++            <description>Go to storefront customer wishlist page and assert product quantity is correct.</description>
++        </annotations>
++        <arguments>
++            <argument name="productName" type="string"/>
++            <argument name="productQty" type="string"/>
++        </arguments>
++        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
++        <waitForPageLoad stepKey="waitForWishList"/>
++        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="mouseOverOnProduct"/>
++        <see userInput="{{productQty}}" stepKey="assertProductQtyCorrect"/>
++    </actionGroup>
++</actionGroups>
+Index: app/code/Magento/Wishlist/Test/Mftf/Section/StorefrontCustomerWishlistProductSection.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Wishlist/Test/Mftf/Section/StorefrontCustomerWishlistProductSection.xml	(revision 912ceab43ebeb14738b2bdbddf7f46c2cc917421)
++++ app/code/Magento/Wishlist/Test/Mftf/Section/StorefrontCustomerWishlistProductSection.xml	(date 1622103542000)
+@@ -17,6 +17,8 @@
+         <element name="ProductImageByImageName" type="text" selector="//main//li//a//img[contains(@src, '{{var1}}')]" parameterized="true"/>
+         <element name="ProductDescription" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//textarea[@class='product-item-comment']" parameterized="true"/>
+         <element name="ProductQuantity" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//input[@class='input-text qty']" parameterized="true"/>
++        <element name="ProductQty" type="text" selector="//main//li//ancestor::div[@class='product-item-info']//input[@class='input-text.qty']"/>
++        <element name="ButtonAddProductToCart" type="button" selector=".column.main .product-item-actions .action.tocart" timeout="30"/>
+         <element name="ProductUpdateWishList" type="button" selector=".column.main .actions-toolbar .action.update" timeout="30"/>
+         <element name="ProductAddAllToCart" type="button" selector=".column.main .actions-toolbar .action.tocart" timeout="30"/>
+         <element name="productShareWishList" type="button" selector="button.action.share" timeout="30" />
+Index: app/code/Magento/Wishlist/Test/Mftf/Section/StorefrontProductInfoMainSection.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Wishlist/Test/Mftf/Section/StorefrontProductInfoMainSection.xml	(revision 912ceab43ebeb14738b2bdbddf7f46c2cc917421)
++++ app/code/Magento/Wishlist/Test/Mftf/Section/StorefrontProductInfoMainSection.xml	(date 1622103542000)
+@@ -10,5 +10,6 @@
+         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+     <section name="StorefrontProductInfoMainSection">
+         <element name="productAddToWishlist" type="button" selector="a.action.towishlist"/>
++        <element name="ProductQuantity" type="input" selector="//input[@class='input-text qty']"/>
+     </section>
+ </sections>
+Index: app/code/Magento/Wishlist/Test/Mftf/Test/StorefrontCustomerUpdateQtyInWishlistTest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Wishlist/Test/Mftf/Test/StorefrontCustomerUpdateQtyInWishlistTest.xml	(date 1622103586000)
++++ app/code/Magento/Wishlist/Test/Mftf/Test/StorefrontCustomerUpdateQtyInWishlistTest.xml	(date 1622103586000)
+@@ -0,0 +1,76 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++ /**
++  * Copyright © Magento, Inc. All rights reserved.
++  * See COPYING.txt for license details.
++  */
++-->
++
++<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
++    <test name="StorefrontCustomerUpdateQtyInWishlistTest">
++        <annotations>
++            <title value="Customer update products qty in Wish List"/>
++            <stories value="Customer able to update products qty in Wish List"/>
++            <description value="Customer able to update products qty in Wish List and add it to the cart"/>
++            <severity value="MAJOR"/>
++            <group value="Wishlist"/>
++        </annotations>
++
++        <before>
++            <!-- Create new Category -->
++            <createData entity="SimpleSubCategory" stepKey="category"/>
++
++            <!-- Create new Simple product and add it to created Category -->
++            <createData entity="SimpleProduct" stepKey="product">
++                <requiredEntity createDataKey="category"/>
++            </createData>
++
++            <!-- Create new Customer -->
++            <createData entity="Simple_US_Customer" stepKey="customer"/>
++        </before>
++
++        <after>
++            <deleteData createDataKey="category" stepKey="deleteCategory"/>
++            <deleteData createDataKey="product" stepKey="deleteProduct"/>
++            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
++        </after>
++
++        <!-- Login to customer account on storefront and add created product to customer's wishlist -->
++        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
++            <argument name="Customer" value="$$customer$$"/>
++        </actionGroup>
++
++        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
++            <argument name="category" value="$$category$$"/>
++            <argument name="product" value="$$product$$"/>
++        </actionGroup>
++
++        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
++            <argument name="productVar" value="$$product$$"/>
++        </actionGroup>
++
++        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" stepKey="checkProductInWishlist">
++            <argument name="productVar" value="$$product$$"/>
++        </actionGroup>
++
++        <!-- Update product's quantity in the customer's wishlist -->
++        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="UpdateProductQtyInWishList">
++            <argument name="productName" value="$$product.name$$"/>
++            <argument name="productQty" value="2"/>
++        </actionGroup>
++
++        <actionGroup ref="AssertProductQtyInWishListActionGroup" stepKey="assertWishListUpdatedProductQty">
++            <argument name="productName" value="$$product.name$$"/>
++            <argument name="productQty" value="2"/>
++        </actionGroup>
++
++        <!-- Add product from the customer's wishlist to shopping cart -->
++        <actionGroup ref="StorefrontCustomerAddProductFromPersonalWishlistToCartActionGroup" stepKey="customerAddProductFromPersonalWishlistToCart">
++            <argument name="productName" value="$$product.name$$"/>
++        </actionGroup>
++
++        <!-- Assert that customer's whishlist is empty -->
++        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="AssertCustomersWhishlistEmpty"/>
++    </test>
++</tests>
+\ No newline at end of file
