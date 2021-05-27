@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerUpdateQtyInWishlistTest">
+        <annotations>
+            <title value="Customer update products qty in Wish List"/>
+            <stories value="Customer able to update products qty in Wish List"/>
+            <description value="Customer able to update products qty in Wish List and add it to the cart"/>
+            <severity value="MAJOR"/>
+            <group value="Wishlist"/>
+        </annotations>
+
+        <before>
+            <!-- Create new Category -->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+
+            <!-- Create new Simple product and add it to created Category -->
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+
+            <!-- Create new Customer -->
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Login to customer account on storefront and add created product to customer's wishlist -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" stepKey="checkProductInWishlist">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <!-- Update product's quantity in the customer's wishlist -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="UpdateProductQtyInWishList">
+            <argument name="productName" value="$$product.name$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductQtyInWishListActionGroup" stepKey="assertWishListUpdatedProductQty">
+            <argument name="productName" value="$$product.name$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+
+        <!-- Add product from the customer's wishlist to shopping cart -->
+        <actionGroup ref="StorefrontCustomerAddProductFromPersonalWishlistToCartActionGroup" stepKey="customerAddProductFromPersonalWishlistToCart">
+            <argument name="productName" value="$$product.name$$"/>
+        </actionGroup>
+
+        <!-- Assert that customer's whishlist is empty -->
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="AssertCustomersWhishlistEmpty"/>
+    </test>
+</tests>
