@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontComparisonListTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product attributes"/>
+            <title value="Comparison List Test"/>
+            <description value="Add two products to comparison list, then add one to the shopping cart"/>
+            <severity value="MAJOR"/>
+            <group value="productCompare"/>
+        </annotations>
+        <before>
+            <!-- Create new Category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create 2 new Simple Products -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create new Customer -->
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCreatedCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Navigate to created Category page on storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product 1 to Comparison List -->
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addFirstProductToCompareList">
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product 2 to Comparison List -->
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSecondProductToCompareList">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+
+        <!-- Check products on comparison page -->
+        <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="compareOpenComparePage"/>
+        <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct1InComparison">
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct2InComparison">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product 2 from comparison List to shopping cart -->
+        <click selector="{{StorefrontProductCompareMainSection.ProductAddToCartByName($$createSimpleProduct2.name$$)}}" stepKey="AddProduct2toCart"/>
+
+        <!-- Remove Simple Product 2 from shopping cart and check that cart is empty-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
+        <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteProduct">
+            <argument name="productName" value="$$createSimpleProduct2.name$$"/>
+        </actionGroup>
+        </test>
+</tests>
