@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="productAddToWishlist" type="button" selector="a.action.towishlist"/>
+        <element name="ProductQuantity" type="input" selector="//input[@class='input-text qty']"/>
     </section>
 </sections>

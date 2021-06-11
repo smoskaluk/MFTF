@@ -17,6 +17,8 @@
         <element name="ProductImageByImageName" type="text" selector="//main//li//a//img[contains(@src, '{{var1}}')]" parameterized="true"/>
         <element name="ProductDescription" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//textarea[@class='product-item-comment']" parameterized="true"/>
         <element name="ProductQuantity" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//input[@class='input-text qty']" parameterized="true"/>
+        <element name="ProductQty" type="text" selector="//main//li//ancestor::div[@class='product-item-info']//input[@class='input-text.qty']"/>
+        <element name="ButtonAddProductToCart" type="button" selector=".column.main .product-item-actions .action.tocart" timeout="30"/>
         <element name="ProductUpdateWishList" type="button" selector=".column.main .actions-toolbar .action.update" timeout="30"/>
         <element name="ProductAddAllToCart" type="button" selector=".column.main .actions-toolbar .action.tocart" timeout="30"/>
         <element name="productShareWishList" type="button" selector="button.action.share" timeout="30" />
